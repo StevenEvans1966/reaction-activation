@@ -58,8 +58,8 @@
     "verified": 10,
     "maximum": 10
   },
-  "url": "https://gitlab.com/StevenEvans1966/reaction-activation",
-  "manifest": "https://gitlab.com/StevenEvans1966/reaction-activation/raw/v10/package/module.json",
-  "download": "https://gitlab.com/StevenEvans1966/reaction-activation/raw/v10/package/reaction-activation-v{{version}}.zip",
-  "changelog": "https://gitlab.com/StevenEvans1966/reaction-activation/raw/v10/Changelog.md"
+  "url": "https://github.com/StevenEvans1966/reaction-activation",
+  "manifest": "https://github.com/StevenEvans1966/reaction-activation/blob/master/module.json",
+  "download": "https://github.com/StevenEvans1966/reaction-activation/blob/master/package/reaction-activation-v{{version}}.zip",
+  "changelog": "https://github.com/StevenEvans1966/reaction-activation/blob/master/CHANGELOG.md"
 }

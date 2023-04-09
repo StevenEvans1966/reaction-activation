@@ -44,11 +44,5 @@ export class Checks {
     const damageTypeCheck: DamageTypeCheck = { reactingTo: reactingTo };
     const reacting = reactingTo.length > 0;
     this.update({ damageTypeCheck: damageTypeCheck }, reacting);
-
-    if (!workflowOptions.reactionChecks) {
-      workflowOptions.reactionChecks = new Map<string, Checks>();
-    }
-
-    workflowOptions.reactionChecks.set(this.itemUuid, this);
   }
 }

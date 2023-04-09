@@ -1,11 +1,10 @@
 import { EffectChangeData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData.js";
 import {
-    reactionHooksData as reactionActivationData,
-    itemCallbackOptionsData,
+    ReactionChangeValue,
+    ItemCallbackOptionsData,
     getDamageTypeForReaction,
     addReactionActivation,
-    removeReactionActivation,
-    getReactionActivation
+    removeReactionActivation
 } from "./module/reactionActivation.js"
 
 import { getDamageTypeNameAndIcon } from "./module/config.js"
@@ -26,7 +25,7 @@ export let warn = (...args) => { if (debugEnabled > 0) console.warn("reaction-ac
 export let error = (...args) => console.error("reaction-activation | ", ...args)
 export let timelog = (...args) => warn("reaction-activation | ", Date.now(), ...args);
 
-const reaction_filter_midi_qol_effect: string = "flags.midi-qol.reactionHooks"
+export const reaction_filter_midi_qol_effect: string = "flags.midi-qol.reactionHooks"
 
 Hooks.once('init', function () {
     console.log('reaction-activation | Initializing reaction-activation');
@@ -42,7 +41,6 @@ Hooks.once('ready', function () {
         warn,
         error,
         timelog,
-        getReactionActivation,
         addReactionActivation,
         removeReactionActivation,
         getDamageTypeForReaction,
@@ -56,21 +54,19 @@ async function applyActiveEffect(actor: Actor, change: EffectChangeData) {
         return;
     }
 
-    let data: reactionActivationData
-
     try {
-        data = JSON.parse(change.value as string) as reactionActivationData
+        JSON.parse(change.value as string) as ReactionChangeValue
     } catch (error) {
-        data = undefined
         error(`flags.midi-qol.reactionHooks bad data ${change.value} ${error} on ${actor.name}`)
+        return
     }
 
-    //@ts-ignore
+    //@ts-expect-error
     let origin = change.effect.collection._source[0].origin
-    await addReactionActivation(origin, data)
+    await addReactionActivation(origin)
 }
 
-function reactionFilter(reactions: Item[], options: itemCallbackOptionsData) {
+function reactionFilter(reactions: Item[], options: ItemCallbackOptionsData) {
     var i = 0;
 
     while (i < reactions.length) {
@@ -83,7 +79,7 @@ function reactionFilter(reactions: Item[], options: itemCallbackOptionsData) {
         }
 
         Hooks.call(`midi-qol.ReactionFilter.${itemUuid}`, item, options)
-        const itemResults: Checks | undefined = options.workflowOptions.reactionChecks?.get(itemUuid)
+        const itemResults: Checks | undefined = options.workflowOptions.reactionChecks?.find(check => check.itemUuid = itemUuid)
 
         if (itemResults?.reacting === false) {
             console.info("removed reaction:", item)

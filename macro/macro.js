@@ -22,10 +22,9 @@ try {
         var content = duplicate(chatMessage.content);
         content = content.substring(0, content.length - 6)
         content += `<div class="card-header flexrow">
-        <span>Absorbed ${dialogRtn.nameAndIcon.name} <span>
-        <img src="${dialogRtn.nameAndIcon.img}" width="15" height="15" style="border:0px;vertical-align: bottom;"/>
+        <img src="${dialogRtn.nameAndIcon.img}" width="34" height="34" style="border:0px;vertical-align: bottom;"/>
+        <h3>Absorbed ${dialogRtn.nameAndIcon.name}</h3>
         </div></div>`
-        console.log(chatMessage.content)
         chatMessage.update({ content: content })
 
         const itemName = item.name;

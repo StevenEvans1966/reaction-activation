@@ -1,7 +1,7 @@
 {
 	"name": "reaction-activation",
 	"title": "Reaction Activation",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "Add Activation Rules using Midi-qol",
 	"devDir": "D:/Users/Steven/AppData/Local/FoundryVTT/Data/modules",
 	"main": "src/main.ts",
