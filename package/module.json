@@ -2,7 +2,7 @@
   "id": "reaction-activation",
   "title": "Reaction Activation",
   "description": "Add Activation Rules using Midi-qol",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "authors": [
     {
       "name": "stevenEvans1066"
@@ -59,7 +59,7 @@
     "maximum": 10
   },
   "url": "https://github.com/StevenEvans1966/reaction-activation",
-  "manifest": "https://github.com/StevenEvans1966/reaction-activation/blob/master/package/module.json",
-  "download": "https://github.com/StevenEvans1966/reaction-activation/blob/master/package/reaction-activation-v1.0.2.zip",
+  "manifest": "https://github.com/StevenEvans1966/reaction-activation/releases/download/1.0.3/module.json",
+  "download": "https://github.com/StevenEvans1966/reaction-activation/releases/download/1.0.3/reaction-activation-v1.0.3.zip",
   "changelog": "https://github.com/StevenEvans1966/reaction-activation/blob/master/CHANGELOG.md"
 }

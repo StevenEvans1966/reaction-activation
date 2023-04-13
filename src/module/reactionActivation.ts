@@ -1,6 +1,6 @@
 import { EffectChangeData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData.js";
 
-import { error, log, reaction_filter_midi_qol_effect as reaction_filter_midi_qol_change_name } from "../main.js";
+import { error, log, reaction_filter_midi_qol_effect, ReactionActivationItems } from "../main.js";
 import { Checks } from "./checks.js";
 import { showSelectDamageButtonsDialog, DialogRtn } from "../app/selectDamageButtonsDialog.js";
 import { getDamageTypeNameAndIcon } from "./config.js";
@@ -12,44 +12,21 @@ export type DamageDetail = { type: string; damage: number };
 export type WorkflowOptions = {
     damageDetail: DamageDetail[];
     reactionChecks?: Checks[];
-};
+}
 
-const ReactionActivationHookIds = new Map<string, number>()
-
-export async function addReactionActivation(itemUuid: string) {
-    const hookName = `midi-qol.ReactionFilter.${itemUuid}`;
-
-    //@ts-ignore
-    let hooks = Hooks.events[hookName];
-    let hooksArr = (hooks ? Array.from(hooks) : []) as { id: number }[];
-
-    if (ReactionActivationHookIds.get(itemUuid) === -1 || hooksArr.length === 0) {
-        addHook(itemUuid, hookName)
-    }
-
-    let removed = false;
-
-    const currentHookId = ReactionActivationHookIds.get(itemUuid);
-
-    for (const entry of hooksArr) {
-        if (entry.id !== currentHookId) {
-            Hooks.off(hookName, entry.id);
-            removed = true;
-        }
-    }
-
-    if (removed) {
-        //@ts-ignore
-        hooks = Hooks.events[hookName];
-        hooksArr = (hooks ? Array.from(hooks) : []) as { id: number }[];
-
-        if (hooksArr.length === 0) {
-            addHook(itemUuid, hookName)
-        }
+export function addReactionActivation(itemUuid: string): void {
+    if (!ReactionActivationItems.has(itemUuid)) {
+        ReactionActivationItems.set(itemUuid, true);
+        log(`added reaction activation for ${itemUuid}`)
     }
 }
 
-async function itemReactionFilterCallback(item: Item, options: ItemCallbackOptionsData) {
+export function removeReactionActivation(itemUuid: string): void {
+    ReactionActivationItems.delete(itemUuid);
+    log(`removed reaction activation for ${itemUuid}`)
+}
+
+export function itemReactionFilter(item: Item, options: ItemCallbackOptionsData): boolean {
     const itemUuid: string = item.uuid;
     const workflowOptions = options.workflowOptions;
 
@@ -66,15 +43,8 @@ async function itemReactionFilterCallback(item: Item, options: ItemCallbackOptio
 
     const triggeringDamageTypes = getReactionActivationDamageTypes(item);
     checks.checkDamageType(workflowOptions, triggeringDamageTypes);
-}
 
-export async function removeReactionActivation(itemUuid: string) {
-    const hookId = ReactionActivationHookIds.get(itemUuid);
-
-    if (hookId) {
-        Hooks.off(`midi-qol.ReactionFilter.${itemUuid}`, hookId);
-        log(`removing reactionActivationHook for ${itemUuid}`)
-    }
+    return checks.reacting;
 }
 
 export async function getDamageTypeForReaction(workflowOptions: WorkflowOptions, item: Item): Promise<DialogRtn | undefined> {
@@ -92,7 +62,7 @@ export async function getDamageTypeForReaction(workflowOptions: WorkflowOptions,
     }
 
     const itemUuid = item.uuid;
-    const result = results.find(check=> check.itemUuid = itemUuid);
+    const result = results.find(check => check.itemUuid = itemUuid);
 
     if (!result) {
         error(`no check results for item ${itemUuid}`);
@@ -125,10 +95,6 @@ export async function getDamageTypeForReaction(workflowOptions: WorkflowOptions,
     return damageType;
 }
 
-async function addHook(itemUuid: string, hookName: string): Promise<void> {
-    ReactionActivationHookIds.set(itemUuid, Hooks.on(hookName, itemReactionFilterCallback));
-    log(`adding reactionActivationHook for ${itemUuid}`)
-}
 
 export function getReactionActivationDamageTypes(item: Item): string[] {
     let change = find_reaction_filter_midi_qol_change(item)
@@ -145,12 +111,12 @@ function find_reaction_filter_midi_qol_change(item: Item): EffectChangeData | un
     for (const e of item.effects) {
         //@ts-ignore
         for (const c of e.changes) {
-            if (c.key === reaction_filter_midi_qol_change_name) {
+            if (c.key === reaction_filter_midi_qol_effect) {
                 return c;
             }
         }
     }
 
-    error(`cant find ${reaction_filter_midi_qol_change_name}`)
+    error(`cant find ${reaction_filter_midi_qol_effect}`)
     return undefined;
 }

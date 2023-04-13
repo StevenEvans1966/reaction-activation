@@ -4,12 +4,14 @@ import {
     ItemCallbackOptionsData,
     getDamageTypeForReaction,
     addReactionActivation,
-    removeReactionActivation
+    removeReactionActivation,
+    itemReactionFilter
 } from "./module/reactionActivation.js"
 
 import { getDamageTypeNameAndIcon } from "./module/config.js"
 import { Checks } from "./module/checks.js"
 import { showSelectDamageButtonsDialog } from "./app/selectDamageButtonsDialog.js"
+import { macros } from "./macros.js"
 
 export let setDebugLevel = (debugText: string) => {
     debugEnabled = { "none": 0, "warn": 1, "debug": 2, "all": 3 }[debugText] || 0;
@@ -26,9 +28,14 @@ export let error = (...args) => console.error("reaction-activation | ", ...args)
 export let timelog = (...args) => warn("reaction-activation | ", Date.now(), ...args);
 
 export const reaction_filter_midi_qol_effect: string = "flags.midi-qol.reactionHooks"
+export const ReactionActivationItems = new Map<string, boolean>()
+
+export function HookName(itemUuid: string): string {
+    return `midi-qol.ReactionFilter.${itemUuid}`;
+}
 
 Hooks.once('init', function () {
-    console.log('reaction-activation | Initializing reaction-activation');
+    log('Initializing reaction-activation')
     Hooks.on("midi-qol.ReactionFilter", reactionFilter)
     Hooks.on("applyActiveEffect", applyActiveEffect)
 });
@@ -46,10 +53,12 @@ Hooks.once('ready', function () {
         getDamageTypeForReaction,
         showSelectDamageButtonsDialog,
         getDamageTypeNameAndIcon,
+        macros
     }
 })
 
-async function applyActiveEffect(actor: Actor, change: EffectChangeData) {
+//@ts-ignore
+function applyActiveEffect(actor: globalThis.dnd5e.documents.Actor5e, change: EffectChangeData) {
     if (change.key !== reaction_filter_midi_qol_effect) {
         return;
     }
@@ -61,31 +70,21 @@ async function applyActiveEffect(actor: Actor, change: EffectChangeData) {
         return
     }
 
-    //@ts-expect-error
-    let origin = change.effect.collection._source[0].origin
-    await addReactionActivation(origin)
+    //@ts-ignore
+    addReactionActivation(change.effect.origin)
 }
 
-function reactionFilter(reactions: Item[], options: ItemCallbackOptionsData) {
-    var i = 0;
-
-    while (i < reactions.length) {
+//@ts-ignore
+function reactionFilter(reactions: globalThis.dnd5e.documents.Item5e[], options: ItemCallbackOptionsData) {
+    for (let i = 0; i < reactions.length; i++) {
         const item = reactions[i];
-        const itemUuid = item?.uuid
+        const itemUuid = item.uuid
 
-        if (!itemUuid) {
-            console.error("No uuid for item", item)
-            continue
-        }
-
-        Hooks.call(`midi-qol.ReactionFilter.${itemUuid}`, item, options)
-        const itemResults: Checks | undefined = options.workflowOptions.reactionChecks?.find(check => check.itemUuid = itemUuid)
-
-        if (itemResults?.reacting === false) {
-            console.info("removed reaction:", item)
-            reactions.splice(i, 1);
-        } else {
-            ++i;
+        if (ReactionActivationItems.has(itemUuid)) {
+            if (itemReactionFilter(item, options) === false) {
+                log(`removed reaction for ${itemUuid}`,)
+                reactions.splice(i, 1);
+            }
         }
     }
 }

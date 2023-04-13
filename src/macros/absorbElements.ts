@@ -1,23 +1,22 @@
-const version = "1.0.3";
+import { FunctionArgs, FunctionArgsActor } from "../macros";
+import { log, error } from "../main.js";
+import { getDamageTypeForReaction } from "../module/reactionActivation.js"
 
-console.log("Absorb Elements:", args)
-const lastArg = args[args.length - 1];
-try {
-    if (args[0] === "off") {
-        await ReactionActivation.removeReactionActivation(lastArg.origin)
-        return;
-    }
-} catch (err) {
-    console.error(`Absorb Elements Off ${version}`, err);
-}
+export async function absorbElements({ speaker, actor, token, character, item, args }: FunctionArgs) {
+    const version = "1.0.3";
+    log({ speaker, actor, token, character, item, args })
 
-try {
-    if (args[0].tag === "OnUse" && args[0].macroPass === "postActiveEffects") {
-        let tactor = (args[0].tokenUuid) ? (await fromUuid(args[0].tokenUuid)).actor : game.actors.get(args[0].actorId);
-        let item = args[0].item
+    try {
+        let tactor: FunctionArgsActor = token?.actor ?? actor;
 
-        let dialogRtn = await ReactionActivation.getDamageTypeForReaction(args[0].workflowOptions, item)
+        let dialogRtn = await getDamageTypeForReaction(args[0].workflowOptions, item)
 
+        if (!dialogRtn) {
+            error("no dialogRtn");
+            return;
+        }
+
+        //@ts-ignore
         const chatMessage = game.messages.get(args[0].itemCardId);
         var content = duplicate(chatMessage.content);
         content = content.substring(0, content.length - 6)
@@ -38,7 +37,8 @@ try {
         changes = duplicate(effect.changes);
         changes[0].value = damageType;
         await effect.update({ changes });
+
+    } catch (err) {
+        console.error(`Absorb Elements OnUse ${version}`, err);
     }
-} catch (err) {
-    console.error(`Absorb Elements OnUse ${version}`, err);
 }
