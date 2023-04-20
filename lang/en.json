@@ -1,4 +1,10 @@
 {
-	"MODULE_PACKAGE_NAME.ExampleDialog_Title": "Example Dialog",
-	"MODULE_PACKAGE_NAME.ExampleDialog_Content": "<p>This is just an example, I don't care if you say yes or no!</p>"
+	"sre.Debug.Name": "Enable debug",
+	"sre.Debug.Hint": "Set to None unless you want to fill up the console log. All enables CONFIG.hooks.debug",
+	"sre.DebugOptions": {
+		"none": "None",
+		"warn": "Warnings",
+		"debug": "Debug",
+		"all": "All"
+	}
 }

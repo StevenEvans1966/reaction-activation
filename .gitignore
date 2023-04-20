@@ -6,3 +6,4 @@ dist/templates
 dist/**/*.js
 dist/**/*.json
 *.code-workspace
+.vscode

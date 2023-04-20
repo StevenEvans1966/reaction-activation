@@ -1,17 +1,26 @@
 import { EffectChangeData } from "@league-of-foundry-developers/foundry-vtt-types/src/foundry/common/data/data.mjs/effectChangeData.js";
-
-import { error, log, reaction_filter_midi_qol_effect, ReactionActivationItems } from "../main.js";
+import { Item5e } from "../globalTypes.js";
+import { error, log } from "../main.js";
 import { Checks } from "./checks.js";
 import { showSelectDamageButtonsDialog, DialogRtn } from "../app/selectDamageButtonsDialog.js";
 import { getDamageTypeNameAndIcon } from "./config.js";
+import { ReactionFilterValue, reaction_filter_effect } from "../effects/reactionFilterEffect.js";
 
 export interface ItemCallbackOptionsData { workflowOptions: WorkflowOptions };
-export type ReactionChangeValue = { damageTypes: string[] };
 export type DamageDetail = { type: string; damage: number };
 
 export type WorkflowOptions = {
     damageDetail: DamageDetail[];
     reactionChecks?: Checks[];
+}
+
+export const ReactionActivationItems = new Map<string, boolean>()
+
+export let reactionActivation =
+{
+    addReactionActivation,
+    removeReactionActivation,
+    getDamageTypeForReaction,
 }
 
 export function addReactionActivation(itemUuid: string): void {
@@ -26,7 +35,22 @@ export function removeReactionActivation(itemUuid: string): void {
     log(`removed reaction activation for ${itemUuid}`)
 }
 
-export function itemReactionFilter(item: Item, options: ItemCallbackOptionsData): boolean {
+//@ts-ignore
+export function reactionFilter(reactions: Item5e[], options: ItemCallbackOptionsData) {
+    for (let i = 0; i < reactions.length; i++) {
+        const item = reactions[i];
+        const itemUuid = item.uuid
+
+        if (ReactionActivationItems.has(itemUuid)) {
+            if (itemReactionFilter(item, options) === false) {
+                log(`removed reaction for ${itemUuid}`)
+                reactions.splice(i, 1);
+            }
+        }
+    }
+}
+
+export function itemReactionFilter(item: Item5e, options: ItemCallbackOptionsData): boolean {
     const itemUuid: string = item.uuid;
     const workflowOptions = options.workflowOptions;
 
@@ -41,17 +65,17 @@ export function itemReactionFilter(item: Item, options: ItemCallbackOptionsData)
         workflowOptions.reactionChecks?.push(checks)
     }
 
-    const triggeringDamageTypes = getReactionActivationDamageTypes(item);
+    const triggeringDamageTypes = getReactionActivationDamageTypes({ item });
     checks.checkDamageType(workflowOptions, triggeringDamageTypes);
 
     return checks.reacting;
 }
 
-export async function getDamageTypeForReaction(workflowOptions: WorkflowOptions, item: Item): Promise<DialogRtn | undefined> {
+export async function getDamageTypeForReaction(workflowOptions: WorkflowOptions, item: Item5e): Promise<DialogRtn | undefined> {
     const results = workflowOptions.reactionChecks;
 
     if (!results) {
-        const damageTypes = getReactionActivationDamageTypes(item);
+        const damageTypes = getReactionActivationDamageTypes({ item });
 
         if (!damageTypes) {
             error("no damage types set");
@@ -95,28 +119,27 @@ export async function getDamageTypeForReaction(workflowOptions: WorkflowOptions,
     return damageType;
 }
 
-
-export function getReactionActivationDamageTypes(item: Item): string[] {
+export function getReactionActivationDamageTypes({ item }: { item: Item5e; }): string[] {
     let change = find_reaction_filter_midi_qol_change(item)
 
     if (!change) {
         return []
     }
 
-    const data = JSON.parse(change.value as string) as ReactionChangeValue;
+    const data = JSON.parse(change.value as string) as ReactionFilterValue;
     return data.damageTypes;
 }
 
-function find_reaction_filter_midi_qol_change(item: Item): EffectChangeData | undefined {
+function find_reaction_filter_midi_qol_change(item: Item5e): EffectChangeData | undefined {
     for (const e of item.effects) {
         //@ts-ignore
         for (const c of e.changes) {
-            if (c.key === reaction_filter_midi_qol_effect) {
+            if (c.key === reaction_filter_effect) {
                 return c;
             }
         }
     }
 
-    error(`cant find ${reaction_filter_midi_qol_effect}`)
+    error(`cant find ${reaction_filter_effect}`)
     return undefined;
 }

@@ -1,4 +1,9 @@
-# reaction-activation
+# steven-premades
+
+## Release 1.0.4
+-rename to steven-premades
+-added favored foe
+-reworked code structure
 ## Release 1.0.3
 -rework to remove use of hooks,
 -added internal macro for absorbElements

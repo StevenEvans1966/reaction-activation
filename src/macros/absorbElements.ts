@@ -1,13 +1,14 @@
-import { FunctionArgs, FunctionArgsActor } from "../macros";
+import { FunctionArg } from "../macro.js";
+import { Actor5e } from "../globalTypes.js";
 import { log, error } from "../main.js";
 import { getDamageTypeForReaction } from "../module/reactionActivation.js"
 
-export async function absorbElements({ speaker, actor, token, character, item, args }: FunctionArgs) {
-    const version = "1.0.3";
+export async function absorbElements({ speaker, actor, token, character, item, args }: FunctionArg) {
+    const version = "1.0.4";
     log({ speaker, actor, token, character, item, args })
 
     try {
-        let tactor: FunctionArgsActor = token?.actor ?? actor;
+        let tactor: Actor5e = token?.actor ?? actor;
 
         let dialogRtn = await getDamageTypeForReaction(args[0].workflowOptions, item)
 

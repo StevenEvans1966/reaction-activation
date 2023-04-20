@@ -38,9 +38,9 @@
   },
   "packs": [
     {
-      "name": "reaction-activation",
-      "label": "Reaction Activation Example",
-      "path": "packs/item-example.db",
+      "name": "steven-premades",
+      "label": "Steven Premades Items",
+      "path": "packs/items.db",
       "type": "Item",
       "system": "dnd5e",
       "lang": []
@@ -58,8 +58,8 @@
     "verified": 10,
     "maximum": 10
   },
-  "url": "https://github.com/StevenEvans1966/reaction-activation",
-  "manifest": "https://github.com/StevenEvans1966/reaction-activation/releases/download/{{version}}/module.json",
-  "download": "https://github.com/StevenEvans1966/reaction-activation/releases/download/{{version}}/reaction-activation-v{{version}}.zip",
-  "changelog": "https://github.com/StevenEvans1966/reaction-activation/blob/master/CHANGELOG.md"
+  "url": "https://github.com/StevenEvans1966/",
+  "manifest":  "https://github.com/StevenEvans1966/steven-premades/releases/latest/download/module.json",
+  "download":  "https://github.com/StevenEvans1966/steven-premades/releases/latest/download/steven-premades-{{version}}.zip",
+  "changelog": "https://github.com/StevenEvans1966/steven-premades/releases/latest/download/CHANGELOG.md"
 }

@@ -7,11 +7,6 @@ type DamageTypeIconData = {
   [key: string]: IconData
 }
 
-export function getUnknownDamageTypes(damagesToShow: string[]): string[] {
-  let keys = Object.keys(damageTypeIcons);
-  return damagesToShow.filter(t => !keys.includes(t))
-}
-
 export let damageTypeIcons: DamageTypeIconData = {
   bludgeoning: { img: "icons/weapons/clubs/club-baton-brown.webp" },
   piercing: { img: "icons/weapons/swords/swords-sharp-worn.webp" },
@@ -28,6 +23,11 @@ export let damageTypeIcons: DamageTypeIconData = {
   radiant: { img: "icons/magic/holy/projectiles-blades-salvo-yellow.webp" },
 };
 
+export function getUnknownDamageTypes(damagesToShow: string[]): string[] {
+  let keys = Object.keys(damageTypeIcons);
+  return damagesToShow.filter(t => !keys.includes(t))
+}
+
 export function getAllDamageTypeNameAndIcon(damageTypes: string[]): NameAndIconData[] {
   return damageTypes.map(damageType => getDamageTypeNameAndIcon(damageType))
 }
@@ -43,7 +43,6 @@ export function getDamageTypeNameAndIcon(damageType: string): NameAndIconData {
 
   if (!img) {
     error(`No damage image for ${damageType}`)
-
   }
 
   return { key: damageType, name: name, img: img }

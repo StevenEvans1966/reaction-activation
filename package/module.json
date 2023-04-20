@@ -1,8 +1,8 @@
 {
-  "id": "reaction-activation",
-  "title": "Reaction Activation",
-  "description": "Add Activation Rules using Midi-qol",
-  "version": "1.0.3",
+  "id": "steven-premades",
+  "title": "Steven Premades",
+  "description": "Premades using Midi-qol",
+  "version": "1.0.4",
   "authors": [
     {
       "name": "stevenEvans1066"
@@ -38,9 +38,9 @@
   },
   "packs": [
     {
-      "name": "reaction-activation",
-      "label": "Reaction Activation Example",
-      "path": "packs/item-example.db",
+      "name": "steven-premades",
+      "label": "Steven Premades Items",
+      "path": "packs/items.db",
       "type": "Item",
       "system": "dnd5e",
       "lang": []
@@ -58,8 +58,8 @@
     "verified": 10,
     "maximum": 10
   },
-  "url": "https://github.com/StevenEvans1966/reaction-activation",
-  "manifest": "https://github.com/StevenEvans1966/reaction-activation/releases/download/1.0.3/module.json",
-  "download": "https://github.com/StevenEvans1966/reaction-activation/releases/download/1.0.3/reaction-activation-v1.0.3.zip",
-  "changelog": "https://github.com/StevenEvans1966/reaction-activation/blob/master/CHANGELOG.md"
+  "url": "https://github.com/StevenEvans1966/",
+  "manifest":  "https://github.com/StevenEvans1966/steven-premades/releases/latest/download/module.json",
+  "download":  "https://github.com/StevenEvans1966/steven-premades/releases/latest/download/steven-premades-1.0.4.zip",
+  "changelog": "https://github.com/StevenEvans1966/steven-premades/releases/latest/download/CHANGELOG.md"
 }

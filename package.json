@@ -1,8 +1,8 @@
 {
-	"name": "reaction-activation",
-	"title": "Reaction Activation",
-	"version": "1.0.3",
-	"description": "Add Activation Rules using Midi-qol",
+	"name": "steven-premades",
+	"title": "Steven Premades",
+	"version": "1.0.4",
+	"description": "Premades using Midi-qol",
 	"devDir": "D:/Users/Steven/AppData/Local/FoundryVTT/Data/modules",
 	"main": "src/main.ts",
 	"scripts": {
