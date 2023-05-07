@@ -1,5 +1,6 @@
 # steven-premades
-
+## Realse 1.0.5
+bug fixes to favored foe - added 
 ## Release 1.0.4
 -rename to steven-premades
 -added favored foe

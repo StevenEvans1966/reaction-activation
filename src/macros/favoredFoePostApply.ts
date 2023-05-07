@@ -34,7 +34,7 @@ export async function favoredFoePostApplyDamageBonus({ speaker, actor, token, ch
             }
         }
 
-        if (actor.items.find((t: Item5e) => t.name === "Favored Foe").system.uses.value = 0) return {};
+        if (!(actor.items.find((t: Item5e) => t.name === "Favored Foe").system.uses.value)) return {};
 
         let lastHitData: LastHit = {
             targetUuid,
@@ -108,7 +108,9 @@ function IsTarget(t: TokenDocument5e, targetUuid: string): boolean {
 async function rollDamageOnFavoredFoeUsed(lastHit: LastHit, actor: Actor5e, token: TokenDocument5e) {
     const damageRtn = await createBonusDamage(actor, lastHit.targetUuid, lastHit.damageType, lastHit.isCritical, lastHit.attackItemImg)
     if (!damageRtn.damageRoll) return
-    const roll = await (new Roll(damageRtn.damageRoll).evaluate({ async: true }));
+    const roll = await (new Roll(damageRtn.damageRoll).evaluate({ async: true,  }));
+    //@ts-ignore
+    game.dice3d?.showForRoll(roll)
     const options = { flavor: damageRtn.flavor, itemCardId: lastHit.itemCardId, isCritical: lastHit.isCritical };
     const targets = [await fromUuid(lastHit.targetUuid)];
 
