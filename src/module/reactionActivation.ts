@@ -4,7 +4,7 @@ import { error, log } from "../main.js";
 import { Checks } from "./checks.js";
 import { showSelectDamageButtonsDialog, DialogRtn } from "../app/selectDamageButtonsDialog.js";
 import { getDamageTypeNameAndIcon } from "./config.js";
-import { ReactionFilterValue, reaction_filter_effect } from "../effects/reactionFilterEffect.js";
+import { ReactionFilterValue, REACTION_FILTER_NAME } from "../effects/reactionFilterEffect.js";
 
 export interface ItemCallbackOptionsData { workflowOptions: WorkflowOptions };
 export type DamageDetail = { type: string; damage: number };
@@ -133,13 +133,13 @@ export function getReactionActivationDamageTypes({ item }: { item: Item5e; }): s
 function find_reaction_filter_midi_qol_change(item: Item5e): EffectChangeData | undefined {
     for (const e of item.effects) {
         //@ts-ignore
-        for (const c of e.changes) {
-            if (c.key === reaction_filter_effect) {
+        for (var c of e.changes) {
+            if (c.key === REACTION_FILTER_NAME) {
                 return c;
             }
         }
     }
 
-    error(`cant find ${reaction_filter_effect}`)
+    error(`cant find ${REACTION_FILTER_NAME}`)
     return undefined;
 }

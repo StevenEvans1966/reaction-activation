@@ -102,7 +102,7 @@ export async function favoredFoePostApplyOnUse({ speaker, actor, token, characte
 }
 
 function IsTarget(t: TokenDocument5e, targetUuid: string): boolean {
-    return t.actor.uuid === targetUuid;
+    return t.document.uuid === targetUuid;
 }
 
 async function rollDamageOnFavoredFoeUsed(lastHit: LastHit, actor: Actor5e, token: TokenDocument5e) {

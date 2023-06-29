@@ -55,8 +55,8 @@
   ],
   "compatibility": {
     "minimum": 10.286,
-    "verified": 10,
-    "maximum": 10
+    "verified": 11,
+    "maximum": 11
   },
   "url": "https://github.com/StevenEvans1966/",
   "manifest":  "https://github.com/StevenEvans1966/steven-premades/releases/latest/download/module.json",
