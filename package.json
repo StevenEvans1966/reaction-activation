@@ -1,7 +1,7 @@
 {
 	"name": "steven-premades",
 	"title": "Steven Premades",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "Premades using Midi-qol",
 	"devDir": "D:/Users/Steven/AppData/Local/FoundryVTT/Data/modules",
 	"main": "src/main.ts",
