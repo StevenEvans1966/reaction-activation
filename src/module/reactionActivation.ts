@@ -59,15 +59,15 @@ export function itemReactionFilter(item: Item5e, options: ItemCallbackOptionsDat
     }
 
     let checks: Checks | undefined = workflowOptions.reactionChecks?.find(check => check.itemUuid = itemUuid);
+    const triggeringDamageTypes = getReactionActivationDamageTypes({ item });
 
     if (!checks) {
         checks = new Checks(itemUuid)
         workflowOptions.reactionChecks?.push(checks)
     }
 
-    const triggeringDamageTypes = getReactionActivationDamageTypes({ item });
-    checks.checkDamageType(workflowOptions, triggeringDamageTypes);
-
+    var result = Checks.checkDamageType(workflowOptions, triggeringDamageTypes);
+    Checks.update(checks, result.update, result.reacting);
     return checks.reacting;
 }
 

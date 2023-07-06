@@ -2,7 +2,7 @@
   "id": "steven-premades",
   "title": "Steven Premades",
   "description": "Premades using Midi-qol",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "authors": [
     {
       "name": "stevenEvans1066"
@@ -60,6 +60,6 @@
   },
   "url": "https://github.com/StevenEvans1966/",
   "manifest":  "https://github.com/StevenEvans1966/steven-premades/releases/latest/download/module.json",
-  "download":  "https://github.com/StevenEvans1966/steven-premades/releases/latest/download/steven-premades-v1.0.6.zip",
+  "download":  "https://github.com/StevenEvans1966/steven-premades/releases/latest/download/steven-premades-v1.0.7.zip",
   "changelog": "https://github.com/StevenEvans1966/steven-premades/releases/latest/download/CHANGELOG.md"
 }

@@ -5,20 +5,20 @@ export type DamageTypeCheck = {
 };
 
 export class Checks {
-  constructor(itemUuid: string) {
-    this.itemUuid = itemUuid;
-  }
-
   itemUuid: string;
   reacting: boolean = false;
   damageTypeCheck?: DamageTypeCheck;
 
-  update(update: Partial<Checks>, reacting: boolean) {
-    Object.assign(this, update);
-    this.reacting ||= reacting;
+  constructor(itemUuid: string) {
+    this.itemUuid = itemUuid;
   }
 
-  checkDamageType(workflowOptions: WorkflowOptions, triggeringDamageTypes: string[]) {
+  static update(checks: Checks, update: Partial<Checks>, reacting: boolean) {
+    Object.assign(checks, update);
+    checks.reacting ||= reacting;
+  }
+
+  static checkDamageType(workflowOptions: WorkflowOptions, triggeringDamageTypes: string[]): { update: Partial<Checks>, reacting: boolean } {
     const damageDetails = workflowOptions.damageDetail;
     const triggeringDamageTypesSet = new Set(triggeringDamageTypes);
 
@@ -43,6 +43,7 @@ export class Checks {
 
     const damageTypeCheck: DamageTypeCheck = { reactingTo: reactingTo };
     const reacting = reactingTo.length > 0;
-    this.update({ damageTypeCheck: damageTypeCheck }, reacting);
+    const update: Partial<Checks> = { damageTypeCheck };
+    return { update, reacting };
   }
 }
